@@ -1,0 +1,6 @@
+[submodule "app/views/themed/coresys-ui"]
+	path = app/views/themed/coresys-ui
+	url = /sysman/git/coresys-ui.git
+[submodule "app/vendors/When"]
+	path = app/vendors/When
+	url = git://github.com/tplaner/When.git

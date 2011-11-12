@@ -1,0 +1,16 @@
+"A lot of people use cron jobs as canaries in the mine, looking when the mail arrived to see if the canary is dead.
+The problem is, sometimes a cat steals the canary, and it's harder to notice something that's just not there."
+- Paul Reinheimer
+
+CASES
+
+should just be able to send it email & continue
+
+Expect mail from xxx subject yyy body = zzz between 12:00->12:05, if any of that isn't true warn me.
+- Paul Reinheimer
+
+only send an email when this mail differs from the last one
+
+option: capture-duplicates
+option: 
+
