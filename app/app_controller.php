@@ -42,4 +42,13 @@ class AppController extends Controller {
 		$this->Auth->fields = array('username' => 'email', 'password' => 'password');
 	}
 
+	function beforeRender() {
+		$email = '';
+		$user = $this->Auth->user();
+		if (!empty($user['User']['key'])) {
+			$email = "observer+{$user['User']['key']}@automata.me";
+		}
+		$this->set('observer_email', $email);
+	}
+
 }

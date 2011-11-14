@@ -27,7 +27,7 @@ $(function(){
 		<?php echo $this->Form->input('start', array('label' => 'When do you expect the email?'));?>
 		<div class="input">
 			<label>How late can it be?</label>
-			<?php print $form->select('interval', range(0, 30), 5) ?>
+			<?php print $form->select('interval', range(0, 30)) ?>
 			<?php print $form->select('metric', array('minutes' => 'minutes', 'hours' => 'hours'), 'minutes') ?>
 		</div>
 		<?php echo $this->Form->input('freq', array('label' => 'Frequency', 

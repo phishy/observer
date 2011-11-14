@@ -1,6 +1,11 @@
 <script>
 $(function(){
-	$('#tabs').tabs();
+	$('#tabs').tabs({
+		cookie: {
+			// store cookie for a day, without, it would be a session cookie
+			expires: 1
+		}
+	});
 });
 </script>
 
@@ -10,8 +15,8 @@ $(function(){
 
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">Job Queue</a></li>
-		<li><a href="#tabs-2">Jobless Correspondence</a></li>
+		<li><a href="#tabs-1">Upcoming Job Queue</a></li>
+		<li><a href="#tabs-2">Incoming Email</a></li>
 	</ul>
 	<div id="tabs-1">
 		<p>
@@ -80,7 +85,7 @@ $(function(){
 					<td><?php print date('M d, Y H:i:s', strtotime($e['Email']['created'])) ?></td>
 					<td>
 						<?php print $html->link('View', '/emails/view/'.$e['Email']['id'], array('class' => 'button')) ?>
-						<?php print $html->link('Observe', "/jobs/add/?from=". $e['Email']['from'] ."&subject=" . urlencode($e['Email']['subject']), array('class' => 'button')) ?>
+						<?php print $html->link('Observe', '/jobs/add/email:' . $e['Email']['id'],  array('class' => 'button')) ?>
 					</td>
 				</tr>
 				<?php endforeach ?>

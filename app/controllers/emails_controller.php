@@ -14,7 +14,9 @@ class EmailsController extends AppController {
 			$this->Session->setFlash(__('Invalid email', true));
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->set('email', $this->Email->read(null, $id));
+		$email = $this->Email->findById($id);
+		$email['Email'] = array_merge($email['Email'], $this->Email->parse($email['Email']['body']));
+		$this->set('email', $email);
 	}
 
 	function add() {

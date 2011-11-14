@@ -22,14 +22,15 @@ class JobsController extends AppController {
 	function dashboard() {
 		$user = $this->Auth->user();
 		$jobs = $this->Job->search(array('user_id' => $user['User']['id']));
-		$job_ids = Set::extract('/Job/id', $jobs);
 		
-		if (!$job_ids) {
-			$emails = array();
-		} else {
-			$emails = $this->Email->find('all', array('conditions' => array(
-				'job_id' => $job_ids
-			)));
+		$emails = $this->Email->find('all', array('conditions' => array(
+			'job_id IS NULL',
+			'user_id' => $user['User']['id'],
+		)));
+		foreach ($emails as &$e) {
+			$record = $e;
+			$record['Email'] = array_merge($record['Email'], $this->Email->parse($e['Email']['body']));
+			$e = $record;
 		}
 
 		$this->set(compact('jobs', 'emails'));
@@ -39,6 +40,10 @@ class JobsController extends AppController {
 	 * display index of jobs
 	 */
 	function index() {
+		$user = $this->Auth->user();
+		$this->paginate['conditions'] = array(
+			'user_id' => $user['User']['id']
+		);
 		$jobs = $this->paginate();
 		$this->set('jobs', $jobs);
 	}
@@ -67,8 +72,8 @@ class JobsController extends AppController {
 	 * create a new job
 	 */
 	function add() {
+		$user = $this->Auth->user();
 		if ($this->data) {
-			$user = $this->Auth->user();
 			$this->data['Job']['user_id'] = $user['User']['id']; 
 			if (!empty($this->data['Job']['freq'])) {
 				$this->data['Job']['rrule'] = "freq={$this->data['Job']['freq']}";
@@ -84,12 +89,17 @@ class JobsController extends AppController {
 			}
 		}
 		if (!$this->data) {
-			if (!empty($this->params['url']['from'])) {
-				$this->data['Job']['from'] = $this->params['url']['from'];
-			}
-			if (!empty($this->params['url']['subject'])) {
-				$this->data['Job']['name'] = $this->params['url']['subject'];
-				$this->data['Job']['subject'] = $this->params['url']['subject'];
+			if (!empty($this->params['named']['email'])) {
+				$email = $this->Email->find('first', array('conditions' => array(
+					'user_id' => $user['User']['id'],
+					'id'      => $this->params['named']['email']
+				)));
+				$email['Parsed'] = $this->Email->parse($email['Email']['body']);
+				$this->data['Job']['from']    = $email['Parsed']['from_email'];
+				$this->data['Job']['start']   = date('Y-m-d H:i:s', strtotime($email['Parsed']['date']));
+				$this->data['Job']['name']    = $email['Email']['subject'];
+				$this->data['Job']['subject'] = $email['Email']['subject'];
+				$this->data['Job']['interval'] = round((strtotime($email['Email']['created']) - strtotime($email['Parsed']['date'])) / 60);
 			}
 		}
 		

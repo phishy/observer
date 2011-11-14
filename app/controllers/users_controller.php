@@ -8,24 +8,44 @@ class UsersController extends AppController {
 	}
 
 	/**
+	 * generates a unique member access key
+	 */
+	function generateKey() {
+		print uniqid();exit;
+	}
+
+	/**
+	 * become another user
+	 */
+	function sudo($user_id = null) {
+		if ($user_id) $this->Session->write('Auth', $this->User->findById($user_id));
+		$this->redirect($this->referer());
+	}
+
+	/**
 	 * creates a new users
 	 */
 	function signup() {
 		if ($this->data) {
-			$exists = $this->User->findByEmail($this->data['User']['email']);
-			if ($exists) {
-				$this->Session->setFlash('An account with this email address already exists', 'default', null, 'error');
-				$this->redirect($this->referer());
+			if ($this->data['User']['password'] == $this->Auth->password('')) {
+				$this->User->invalidate('password', 'Password is required');
 			}
-			if ($this->User->save($this->data)) {
-				$this->Auth->login($this->data);
-				$this->Session->setFlash('Successfully created an account');
-				$this->redirect('/jobs/dashboard');
-			} else {
-				$this->Session->setFlash('Failed to create new account', 'default', null, 'error');
+			$this->data['User']['password_confirm'] = $this->Auth->password($this->data['User']['password_confirm']);
+			if ($this->data['User']['password'] != $this->data['User']['password_confirm']) {
+				$this->User->invalidate('password_confirm', 'Passwords must match');
+			}
+			if ($this->User->validates()) {
+				if ($this->User->add($this->data)) {
+					$this->Auth->login($this->data);
+					$this->Session->setFlash('Successfully created an account');
+					$this->redirect('/jobs/dashboard');
+				} else {
+					$this->Session->setFlash('Failed to create new account', 'default', null, 'error');
+				}	
 			}
 		}
 		unset($this->data['User']['password']);
+		unset($this->data['User']['password_confirm']);
 	}
 
 	/**

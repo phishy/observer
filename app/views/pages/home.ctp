@@ -1,44 +1,58 @@
+<link href='http://fonts.googleapis.com/css?family=Petrona|Love+Ya+Like+A+Sister|Actor' rel='stylesheet' type='text/css'>
 <style>
 #welcome {
 /*	width: 45%;
 	height: 200px;
 	float: left;*/
-	border: 1px solid #CCCCCC;
 	padding: 10px;
-	margin-right: 20px;
-	margin-bottom: 10px;
+	margin-bottom: 5px;
+	font-family: 'Actor', sans-serif;
+	background-color: #C6EDF9;
 }
 #login {
 	width: 520px;
-	height: 200px;
+	height: 220px;
 	float: left;
 	margin: 0 auto;
-	border: 1px solid #CCCCCC;
 	padding: 10px;
 	margin-right: 20px;
+	border: 1px solid #CCCCCC;
 }
 #signup {
-	width: 476px;
-	height: 200px;
+	width: 495px;
+	height: 220px;
 	float: left;
 	margin: 0 auto;
 	border: 1px solid #CCCCCC;
 	padding: 10px;
 }
 #analogy {
-	font-size: 20px;
-	padding: 20px;
+	font-family: 'Actor', sans-serif;
+	font-size: 15px;
+	padding: 15px;
+	background-color: #DDF4FB;
+	margin: 5px 0px 10px 0px;
+}
+#analogy h2 {
+	margin: 0;
+}
+#tagline {
+	width: 49%;
+	float: left;
+	height: 100%;
+	margin-top: 20px;
+}
+#quote {
+	width: 49%;
+	float: left;
 }
 </style>
-<div id="welcome">
-	<h2>Solve your cron email problems.</h2>
-	<p>Reviewing cron messages manually? Yeah, stop doing that.</p>
-	<p>Every administrator or developer receives an email from cron at some point. Why? To determine whether or
-		not a timed job was a success or failure. You could easily send emails to determine when a job was successful, but what
-		if a job does not run? You would have to determine that you were missing that email. We can help.</p>
-		
-	<div id="analogy">"A lot of people use cron jobs as canaries in the mine, looking when the mail arrived to see if the canary is dead. The problem is, sometimes a cat steals the canary, and it's harder to notice something that's just not there." <br />- <b>Paul Reinheimer</b></div>
+
+<div id="analogy">
+	<div id="tagline"><h2>Solve your cron email problems.</h2></div>
+	<div id="quote">"A lot of people use cron jobs as canaries in the mine, looking when the mail arrived to see if the canary is dead. The problem is, sometimes a cat steals the canary, and it's harder to notice something that's just not there."<br /><b>Paul Reinheimer of WonderProxy.com</b></div><br clear="all">
 </div>
+
 <div id="login">
 	<h2>Login</h2>
 	<?php print $form->create('User', array('url' => '/users/login')) ?>
@@ -53,5 +67,6 @@
 	<?php print $form->create('User', array('url' => '/users/signup')) ?>
 	<?php print $form->input('email') ?>
 	<?php print $form->input('password') ?>
+	<?php print $form->input('password_confirm', array('label' => 'Confirm password', 'type' => 'password')) ?>
 	<?php print $form->end('Sign Up') ?>
 </div>
