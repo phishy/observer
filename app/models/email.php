@@ -26,6 +26,27 @@ class Email extends AppModel {
 		return $info['headers'];
 	}
 
+	/**
+	 * find emails not yet assigned to jobs, and link them
+	 */
+	function jobify() {
+		$this->Job = ClassRegistry::init('Job');
+		$emails = $this->find('all', array('conditions' => array(
+			'job_id IS NULL'
+		)));
+		foreach ($emails as $e) {
+			$job = $this->Job->find('first', array('conditions' => array(
+				'user_id' => $e['Email']['user_id'],
+				'from'    => $e['Email']['from'],
+				'subject' => $e['Email']['subject']
+			)));
+			if ($job) {
+				$e['Email']['job_id'] = $job['Job']['id'];
+				$this->save($e);
+			}
+		}
+	}
+
 }
 
 ?>

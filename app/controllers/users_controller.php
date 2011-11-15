@@ -19,7 +19,7 @@ class UsersController extends AppController {
 	 */
 	function sudo($user_id = null) {
 		if ($user_id) $this->Session->write('Auth', $this->User->findById($user_id));
-		$this->redirect($this->referer());
+		$this->redirect('/jobs/dashboard');
 	}
 
 	/**

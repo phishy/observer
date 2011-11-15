@@ -7,7 +7,8 @@
 </style>
 
 <div id="instructions">
-If you would like to start tracking jobs immediately, forward your cron email to <h3><?php print $observer_email ?></h3>
+To begin, send email to the system via <h3><?php print $observer_email ?></h3> When the email starts rolling
+	in, you can start to be more specific about the jobs you define.
 </div>
 
 <?php print $html->link('Dashboard', '/jobs/dashboard', array('class' => 'button')) ?>

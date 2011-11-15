@@ -64,7 +64,6 @@ class JobsController extends AppController {
 			$hash = null;
 		}
 		$job = $this->Job->search(compact('id', 'hash'));
-		$job = $job[0];
 		$this->set('job', $job);
 	}
 
@@ -83,7 +82,7 @@ class JobsController extends AppController {
 			}
 			if ($this->Job->add($this->data)) {
 				$this->Session->setFlash(__('Successfully added job', true));
-				$this->redirect(array('action' => 'index'));
+				$this->redirect('/jobs/dashboard');
 			} else {
 				$this->Session->setFlash('Failed to add job', 'default', null, 'error');
 			}
@@ -131,7 +130,7 @@ class JobsController extends AppController {
 			$this->Session->setFlash(__('Invalid id for job', true));
 			$this->redirect(array('action'=>'index'));
 		}
-		if ($this->Job->delete($id)) {
+		if ($this->Job->delete($id, true)) {
 			$this->Session->setFlash(__('Job deleted', true));
 			$this->redirect(array('action'=>'index'));
 		}

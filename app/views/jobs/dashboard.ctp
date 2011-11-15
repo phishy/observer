@@ -15,7 +15,7 @@ $(function(){
 
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">Upcoming Job Queue</a></li>
+		<li><a href="#tabs-1">Today's Job Queue</a></li>
 		<li><a href="#tabs-2">Incoming Email</a></li>
 	</ul>
 	<div id="tabs-1">
@@ -23,7 +23,7 @@ $(function(){
 			<table>
 				<tr>
 					<th>Status</th>
-					<th>Start</th>
+					<th>Time Expected</th>
 					<th>Job Name</th>
 					<th>Subject</th>
 					<th>From</th>
@@ -57,7 +57,10 @@ $(function(){
 				?>
 				<tr>
 					<td style="background-color: <?php print $color ?>"><?php print $status ?></td>
-					<td><?php print date('g:i A', strtotime($j['Job']['time_start'])) ?></td>
+					<td>
+						<?php print date('g:i A', strtotime($j['Job']['time_start'])) ?> - 
+						<?php print date('g:i A', strtotime($j['Job']['time_start'] . "+ {$j['Job']['tolerance']}")) ?>
+					</td>
 					<td><?php print $j['Job']['name']?></td>
 					<td><?php print $j['Job']['subject']?></td>
 					<td><?php print $j['Job']['from']?></td>
@@ -86,6 +89,7 @@ $(function(){
 					<td>
 						<?php print $html->link('View', '/emails/view/'.$e['Email']['id'], array('class' => 'button')) ?>
 						<?php print $html->link('Observe', '/jobs/add/email:' . $e['Email']['id'],  array('class' => 'button')) ?>
+						<?php print $html->link('Delete', '/emails/delete/' . $e['Email']['id'],  array('class' => 'button')) ?>
 					</td>
 				</tr>
 				<?php endforeach ?>

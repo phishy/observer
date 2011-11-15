@@ -18,10 +18,6 @@
 		<td><?php print $job['Job']['from']?></td>
 	</tr>
 	<tr>
-		<td>Owner</td>
-		<td><?php print $job['Job']['owner_email']?></td>
-	</tr>
-	<tr>
 		<td>Start</td>
 		<td><?php print date('F d, Y g:i A', strtotime($job['Job']['time_start'])) ?></td>
 	</tr>

@@ -7,6 +7,13 @@ class EmailShell extends Shell
 	function _clear() {}
 
 	/**
+	 * find emails not yet assigned to jobs, and link them
+	 */
+	function jobify() {
+		$this->Email->jobify();
+	}
+
+	/**
 	 * receives an email
 	 */
 	function receive() {
@@ -38,20 +45,6 @@ class EmailShell extends Shell
 			exit(67);
 		}
 	}
-
-	/**
-	 * updates email metadata
-	 */
-	// function update_metadata() 
-	// {
-	// 	$emails = $emails = $this->Email->find('all', array('conditions' => array('from' => NULL)));
-	// 	foreach ($emails as $e) {
-	// 		$info = $this->_parse($e['Email']['body']);
-	// 		$e['Email']['from'] = $info['from'];
-	// 		$e['Email']['subject'] = $info['subject'];
-	// 		$this->Email->save($e);
-	// 	}
-	// }
 
 	/**
 	 * a dumb email parsing function

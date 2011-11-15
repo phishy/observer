@@ -6,6 +6,8 @@ class MonitorShell extends Shell {
 
 	var $tasks = array('Job');
 
+	var $uses = array('Email');
+
 	function _welcome(){}
 	function _clear(){}
 
@@ -19,7 +21,9 @@ class MonitorShell extends Shell {
 		$this->out('Started Job Observer process.');
 		$this->out('Awaiting correspondence...');
 		while (true) {
-			$this->Job->run();
+			$this->Email->jobify();
+			$log = $this->Job->run();
+			if ($log) $this->out(implode("\n", $log));
 			$this->Job->notify();
 			sleep(5);
 		}

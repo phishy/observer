@@ -51,14 +51,14 @@ class EmailsController extends AppController {
 
 	function delete($id = null) {
 		if (!$id) {
-			$this->Session->setFlash(__('Invalid id for email', true));
-			$this->redirect(array('action'=>'index'));
+			$this->Session->setFlash('Invalid email', 'default', null, 'error');
+			$this->redirect($this->referer());
 		}
 		if ($this->Email->delete($id)) {
 			$this->Session->setFlash(__('Email deleted', true));
-			$this->redirect(array('action'=>'index'));
+			$this->redirect($this->referer());
 		}
-		$this->Session->setFlash(__('Email was not deleted', true));
-		$this->redirect(array('action' => 'index'));
+		$this->Session->setFlash('Failed to delete email', 'default', null, 'error');
+		$this->redirect($this->referer());
 	}
 }

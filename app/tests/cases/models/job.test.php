@@ -18,14 +18,14 @@ class JobTestCase extends CakeTestCase {
 		ClassRegistry::flush();
 	}
 
-	function testSearchWheneverEvent() {
-		$jobs = $this->Job->search();
-		debug($jobs);exit;
-	}
-
 	function testSearchSingle() {
-		$jobs = $this->Job->search(array('id' => 3));
-		$this->assertEqual(count($jobs), 1);
+		$job = $this->Job->search(array('id' => 3));
+		
+		// should not be recurring, only one element
+		$this->assertEqual(count($job), 1);
+	
+		// should have a calculated end
+		$this->assertEqual($job[0]['Job']['time_end'], '2011-11-10 11:05:00');
 	}
 
 	function testSearchRecurring() {

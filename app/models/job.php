@@ -303,7 +303,7 @@ class Job extends AppModel {
 			$jobs = $this->_recurrences($job, $options);
 		} else {
 			$job['Job']['time_start'] = $job['Job']['start'];
-			$job['Job']['time_end']   = $job['Job']['end'];
+			$job['Job']['time_end']   = date('Y-m-d H:i:s', strtotime($job['Job']['start'] . "+ {$job['Job']['tolerance']}"));
 			$job['Job']['hash']       = $this->hash(array(
 				'id'    => $job['Job']['id'],
 				'start' => strtotime($job['Job']['time_start']),
