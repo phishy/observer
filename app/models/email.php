@@ -18,11 +18,10 @@ class Email extends AppModel {
 		$section = mailparse_msg_get_part($mail, 1);
 		$info = mailparse_msg_get_part_data($section);
 		
-		if (strstr($info['headers']['from'], '<')) {
-			list($before, $after) = explode('<', $info['headers']['from']);
-			$info['headers']['from_email'] = str_replace('>', '', $after);
-		}
-		
+		$regex = "/[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*@(?:[a-z0-9][-a-z0-9]*\.)*(?:[a-z0-9][-a-z0-9]{0,62})\.(?:(?:[a-z]{2}\.)?[a-z]{2,4}|museum|travel)/";
+		preg_match($regex, strtolower($info['headers']['from']), $from);
+		$info['headers']['from_email'] = $from[0];
+
 		return $info['headers'];
 	}
 

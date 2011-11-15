@@ -17,6 +17,25 @@ class JobsController extends AppController {
 	}
 
 	/**
+	 * returns HTML TABLE of email
+	 */
+	function pollEmail() {
+		Configure::write('debug', 0);
+		$this->layout = '';
+		$user = $this->Auth->user();
+		$emails = $this->Email->find('all', array('conditions' => array(
+			'job_id IS NULL',
+			'user_id' => $user['User']['id'],
+		)));
+		foreach ($emails as &$e) {
+			$record = $e;
+			$record['Email'] = array_merge($record['Email'], $this->Email->parse($e['Email']['body']));
+			$e = $record;
+		}
+		$this->set('emails', $emails);
+	}
+
+	/**
 	 * display job dashboard
 	 */
 	function dashboard() {
@@ -101,9 +120,10 @@ class JobsController extends AppController {
 				$this->data['Job']['interval'] = round((strtotime($email['Email']['created']) - strtotime($email['Parsed']['date'])) / 60);
 			}
 		}
-		
-		$event_statuses = $this->EventStatus->find('list');
-		
+
+		$this->data['EventAction'][0]['email'] = $user['User']['email'];
+	
+		$event_statuses = $this->EventStatus->find('list');	
 		$this->set(compact('event_statuses'));
 	}
 

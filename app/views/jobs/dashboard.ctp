@@ -1,4 +1,15 @@
 <script>
+$(function worker(){
+	$.ajax({
+		url: '<?php print Router::url('/jobs/pollEmail') ?>', 
+		success: function(data) {
+			$('#incoming').fadeOut().html(data).fadeIn();
+		},
+		complete: function() {
+			setTimeout(worker, 5000);
+		}
+	});
+});
 $(function(){
 	$('#tabs').tabs({
 		cookie: {
@@ -15,10 +26,10 @@ $(function(){
 
 <div id="tabs">
 	<ul>
-		<li><a href="#tabs-1">Today's Job Queue</a></li>
-		<li><a href="#tabs-2">Incoming Email</a></li>
+		<li><a href="#queue">Today's Job Queue</a></li>
+		<li><a href="#incoming">Incoming Email</a></li>
 	</ul>
-	<div id="tabs-1">
+	<div id="queue">
 		<p>
 			<table>
 				<tr>
@@ -72,28 +83,6 @@ $(function(){
 			</table>
 		</p>
 	</div>
-	<div id="tabs-2">
-		<p>
-			<table>
-				<tr>
-					<th>From</th>
-					<th>Subject</th>
-					<th>Received</th>
-					<th>Actions</th>
-				</tr>
-				<?php foreach($emails as $e): ?>
-				<tr>
-					<td><?php print $e['Email']['from']?></td>
-					<td><?php print $e['Email']['subject']?></td>
-					<td><?php print date('M d, Y H:i:s', strtotime($e['Email']['created'])) ?></td>
-					<td>
-						<?php print $html->link('View', '/emails/view/'.$e['Email']['id'], array('class' => 'button')) ?>
-						<?php print $html->link('Observe', '/jobs/add/email:' . $e['Email']['id'],  array('class' => 'button')) ?>
-						<?php print $html->link('Delete', '/emails/delete/' . $e['Email']['id'],  array('class' => 'button')) ?>
-					</td>
-				</tr>
-				<?php endforeach ?>
-			</table>
-		</p>
+	<div id="incoming">
 	</div>
 </div>
